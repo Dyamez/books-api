@@ -45,56 +45,52 @@ books.get('/', (req, res) => {
         .then(foundBook => {
             res.json(foundBook)
         })
-        .catch(err => {
-            console.log('err', err)
-            res.render('error404')
+        .catch((err) => {
+            res.json({ message: err.message })
         })
 })
 
 // Show:
 books.get('/:id', (req, res) => {
-    Book.findOne({ name: req.params.name })
-        .then(foundBook => {
-            res.json(foundBook)
-        })
-        .catch(err => {
-            console.log('err', err)
-            res.render('error404')
-        })
+    Book.findById(req.params.id)
+    .then(foundBook => {
+        res.json(foundBook)
+}) 
+.catch((err) => {
+    res.json({ message: err.message })
+})
 })
 
-books.put('/books/:id', (req, res) => {
+books.post("/", (req, res) => {
+    const { title, description, year, quantity, imageURL } = req.body
+    const postBook = new Book({ title, description, year, quantity, imageURL })
+    postBook.save()
+      .then((Book) => {
+        res.json(Book)
+      })
+      .catch((err) => {
+        res.json({ message: err.message })
+      });
+  });
+    
+books.put('/:id', (req, res) => {
     Book.findByIdAndUpdate(req.params.id, req.body)
-    .then(foundBook => {
-        res.json(foundBook)
-    //.then(() => {
-        //res.rederect('/books/${req.params.id}')
+    .then(Book => {
+        res.json(Book)
     })
-    .catch(err => {
-        console.log('err', err)
-        res.render('error404')
-    })
+    .catch((err) => {
+        res.json({ message: err.message })
+        })
 })
 
-books.delete('/books/:id', (req, res) => {
+books.delete('/:id', (req, res) => {
     Book.findByIdAndDelete(req.params.id)
-    .then(book => {
-        res.rederect('/books')
-        console.log('Successful Deletion')
+    .then(Book => {
+        res.json(Book)
     })
-    .catch('err', err)
-    res.render('error404')
-})
-
-books.post('/books', (req, res) => {
-    Book.create(req.body)
-    .then(foundBook => {
-        res.json(foundBook)
-    //.then(() => {
-        //res.rederect('/books')
+    .catch((err) => {
+        res.json({ message: err.message })
     })
-    .catch('err', err)
-    res.render('error404')
 })
 
 module.exports = books

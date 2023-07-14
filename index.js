@@ -24,7 +24,7 @@ app.use(express.urlencoded({extended: true}))
 // Book: 
 const booksController = require('./controller/booksController.js')
 app.use('/books', booksController)
-
+app.use(express.json())
 
 // ROUTES
 app.get('/', (req, res) => {
