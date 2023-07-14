@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 // CONFIGURATION
 require('dotenv').config()
@@ -20,6 +21,7 @@ mongoose
 
 // MIDDLEWARE
 app.use(express.urlencoded({extended: true}))
+app.use(cors())
 
 // Book: 
 const booksController = require('./controller/booksController.js')
